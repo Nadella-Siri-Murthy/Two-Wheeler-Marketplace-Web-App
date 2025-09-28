@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vahan Bazar</title>
+  <link rel = "stylesheet" href ="style.css"/>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+    }
+
+    header {
+      background: #000;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 60px;
+      font-weight: bold;
+      color: #ff4500;
+    }
+
+    nav a {
+      margin: 0 10px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    nav a:hover {
+      color: #ff4500;
+    }
+
+    .auth-buttons button {
+      margin-left: 10px;
+      padding: 8px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .login-btn {
+      background: #ff4500;
+      color: #fff;
+    }
+
+    .signup-btn {
+      background: #fff;
+      color: #ff4500;
+    }
+
+    .logout-btn {
+      background: #ff4500;
+      color: #fff;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: #222;
+      padding: 25px;
+      border-radius: 10px;
+      width: 320px;
+      text-align: center;
+      color: #fff;
+    }
+
+    .modal-content h2 {
+      color: #ff4500;
+      margin-bottom: 15px;
+    }
+
+    .modal-content input {
+      width: 90%;
+      padding: 10px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .modal-content button {
+      margin-top: 10px;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      background: #ff4500;
+      color: #fff;
+      cursor: pointer;
+      font-weight: bold;
+      width: 95%;
+    }
+
+    .modal-content button:hover {
+      background: #ff6347;
+    }
+
+    .close {
+      float: right;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    #bc{
+    background-image: url("Motor\ Bikes\ Scooters\ EVs.jpg");
+    background-size: cover;
+    }
+
+    #inmain{
+    height : 100vh;
+    border-top: 30px;
+    text-align: center;
+    /* font-size : 70px; */
+    font-style: italic;
+    color: white;
+    }
+    /* Style for welcome message in auth area */
+.auth-buttons span {
+  font-size: 14px;   /* smaller text */
+  margin-right: 10px;
+  color: #ddd;       /* softer white */
+}
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="logo">VahanBazar</div>
+    <nav>
+      <a href="Home.html" target = "_main">Home</a>
+      <a href="Bikes.html" target = "_main">Bikes</a>
+      <a href="Details.html" target = "_main">Details</a>
+      <a href="Compare.html" target = "_main">Compare</a>
+      <a href="Calculator.html" target = "_main">Calculator</a>
+      <a href="Launches.html" target = "_main">Launches</a>
+      <a href="Sell.html" target = "_main">Sell</a>
+    </nav>
+    <div class="auth-buttons" id="authArea">
+      <button class="login-btn" onclick="openModal('loginModal')">Log In</button>
+      <button class="signup-btn" onclick="openModal('signupModal')">Sign Up</button>
+    </div>
+  </header>
+
+  <!-- Login Modal -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('loginModal')">&times;</span>
+      <h2>Login</h2>
+      <input type="text" id="loginUser" placeholder="Username">
+      <input type="password" id="loginPass" placeholder="Password">
+      <button onclick="login()">Login</button>
+    </div>
+  </div>
+
+   <main>
+        <div id = "bc"><h1 id="inmain">Riding is not just about the destination; It's about the journey!</h1></div>
+   </main>
+
+   <footer>
+        <div id="foot"> &copy; 2025 Vahan Bazar.All rights are reserved.</div>
+    </footer>
+
+  <!-- Signup Modal -->
+  <div id="signupModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('signupModal')">&times;</span>
+      <h2>Sign Up</h2>
+      <input type="text" id="signupUser" placeholder="Choose Username">
+      <input type="password" id="signupPass" placeholder="Choose Password">
+      <button onclick="signup()">Sign Up</button>
+    </div>
+  </div>
+
+  <script>
+    const authArea = document.getElementById("authArea");
+
+    // Open Modal
+    function openModal(id) {
+      document.getElementById(id).style.display = "flex";
+    }
+
+    // Close Modal
+    function closeModal(id) {
+      document.getElementById(id).style.display = "none";
+    }
+
+    // Signup function
+    function signup() {
+      const user = document.getElementById("signupUser").value.trim();
+      const pass = document.getElementById("signupPass").value.trim();
+
+      if (user === "" || pass === "") {
+        alert("Please fill all fields!");
+        return;
+      }
+
+      if (pass.length < 4) {
+        alert("Password must be at least 4 characters!");
+        return;
+      }
+
+      localStorage.setItem("user", user);
+      localStorage.setItem("pass", pass);
+      alert("Signup successful! Please login.");
+      closeModal("signupModal");
+    }
+
+    // Login function
+    function login() {
+      const user = document.getElementById("loginUser").value.trim();
+      const pass = document.getElementById("loginPass").value.trim();
+
+      const savedUser = localStorage.getItem("user");
+      const savedPass = localStorage.getItem("pass");
+
+      if (user === savedUser && pass === savedPass) {
+        localStorage.setItem("loggedInUser", user);
+        showLoggedIn(user);
+        closeModal("loginModal");
+      } else {
+        alert("Invalid username or password!");
+      }
+    }
+
+    // Show logged in state
+    function showLoggedIn(user) {
+      authArea.innerHTML = `
+        <span>👋 Welcome, <b>${user}</b></span>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      `;
+    }
+
+    // Logout
+    function logout() {
+      localStorage.removeItem("loggedInUser");
+      authArea.innerHTML = `
+        <button class="login-btn" onclick="openModal('loginModal')">Log In</button>
+        <button class="signup-btn" onclick="openModal('signupModal')">Sign Up</button>
+      `;
+    }
+
+    // Keep login after refresh
+    window.onload = () => {
+      const loggedInUser = localStorage.getItem("loggedInUser");
+      if (loggedInUser) {
+        showLoggedIn(loggedInUser);
+      }
+    };
+
+    // Close modal if clicked outside
+    window.onclick = (e) => {
+      if (e.target.classList.contains("modal")) {
+        e.target.style.display = "none";
+      }
+    };
+
+  </script>
+</body>
+</html>

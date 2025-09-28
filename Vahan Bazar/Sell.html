@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sell Your Bike - VahanBazar</title>
+  <!-- <link rel = "stylesheet" href ="style.css"/> -->
+  
+   <script>
+  const loggedInUser = localStorage.getItem("loggedInUser");
+  if (!loggedInUser) {
+    alert("Please login to access this page.");
+    window.location.href = "index.html"; // redirect to login page
+  }
+</script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+    }
+
+   /* Header */
+    header {
+      background: black;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header .logo {
+      font-size: 22px;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 20px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    nav ul li a.active {
+      border-bottom: 2px solid #000;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #06d6a0;
+    }
+
+    form {
+      background: #1a1a1a;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      margin-bottom: 30px;
+    }
+
+    form label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+
+    form input, form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      border: none;
+    }
+
+    form button {
+      background: #06d6a0;
+      color: #000;
+      font-weight: bold;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    form button:hover {
+      background: #05b589;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: #1a1a1a;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      transition: transform 0.3s;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    .card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .info {
+      padding: 15px;
+    }
+
+    .info h3 {
+      margin: 0 0 8px;
+      color: #ffd166;
+    }
+
+    .info p {
+      margin: 5px 0;
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    .delete-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #e63946;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 10px;
+      cursor: pointer;
+    }
+
+    footer {
+      background: #e63946;
+      text-align: center;
+      padding: 12px;
+      font-size: 14px;
+      margin-top: 40px;
+    }
+    #logo1{
+      color :#e63946;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+    <header>
+    <div class="logo"><a href = "login.html" target="_main" id = "logo1">VahanBazar</a></div>
+    <nav>
+      <ul>
+        <li><a href="Home.html">Home</a></li>
+        <li><a href="Bikes.html" >Bikes</a></li>
+        <li><a href="Details.html">Details</a></li>
+        <li><a href="Compare.html">Compare</a></li>
+        <li><a href="Calculator.html">Calculator</a></li>
+        <li><a href="Launches.html">Launches</a></li>
+        <!-- <li><a href="Finders.html">Finders</a></li> -->
+        <li><a href="Sell.html">Sell</a></li>
+      </ul>
+    </nav>
+  </header>
+  <!-- Sell Section -->
+  <div class="container">
+    <h2>📢 Sell Your Bike</h2>
+
+    <!-- Sell Form -->
+    <form id="sellForm">
+      <label for="brand">Brand</label>
+      <input type="text" id="brand" required>
+
+      <label for="model">Model</label>
+      <input type="text" id="model" required>
+
+      <label for="year">Year</label>
+      <input type="number" id="year" required>
+
+      <label for="price">Price (₹)</label>
+      <input type="number" id="price" required>
+
+      <label for="desc">Description</label>
+      <textarea id="desc" rows="3" required></textarea>
+
+      <label for="image">Bike Image (URL)</label>
+      <input type="url" id="image" placeholder="https://example.com/bike.jpg" required>
+
+      <button type="submit">Add Listing 🚀</button>
+    </form>
+
+    <!-- Listed Bikes -->
+    <h2>🛵 Your Listings</h2>
+    <div class="grid" id="bikeGrid">
+      <!-- Dynamic Cards go here -->
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <!-- <footer>
+    © 2025 Vahan Bazar. All Rights Reserved.
+  </footer> -->
+
+  <script>
+    const sellForm = document.getElementById("sellForm");
+    const bikeGrid = document.getElementById("bikeGrid");
+
+    // Load saved listings from localStorage
+    let bikes = JSON.parse(localStorage.getItem("bikes")) || [];
+
+    // Function to render listings
+    function renderBikes() {
+      bikeGrid.innerHTML = "";
+      bikes.forEach((bike, index) => {
+        bikeGrid.innerHTML += `
+          <div class="card">
+            <img src="${bike.image}" alt="${bike.brand} ${bike.model}">
+            <div class="info">
+              <h3>${bike.brand} ${bike.model} (${bike.year})</h3>
+              <p><b>Price:</b> ₹${bike.price}</p>
+              <p>${bike.desc}</p>
+            </div>
+            <button class="delete-btn" onclick="deleteBike(${index})">❌</button>
+          </div>
+        `;
+      });
+    }
+
+    // Handle form submit
+    sellForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const bike = {
+        brand: document.getElementById("brand").value,
+        model: document.getElementById("model").value,
+        year: document.getElementById("year").value,
+        price: document.getElementById("price").value,
+        desc: document.getElementById("desc").value,
+        image: document.getElementById("image").value,
+      };
+
+      bikes.push(bike);
+      localStorage.setItem("bikes", JSON.stringify(bikes));
+      renderBikes();
+
+      sellForm.reset();
+    });
+
+    // Delete a listing
+    function deleteBike(index) {
+      bikes.splice(index, 1);
+      localStorage.setItem("bikes", JSON.stringify(bikes));
+      renderBikes();
+    }
+
+    // Initial render
+    renderBikes();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vahan Bazar - Upcoming Launches</title>
+  <!-- <link rel = "stylesheet" href ="style.css"/> -->
+   <script>
+  const loggedInUser = localStorage.getItem("loggedInUser");
+  if (!loggedInUser) {
+    alert("Please login to access this page.");
+    window.location.href = "index.html"; // redirect to login page
+  }
+</script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+    }
+
+   /* Header */
+    header {
+      background: black;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header .logo {
+      font-size: 22px;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 20px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    nav ul li a.active {
+      border-bottom: 2px solid #000;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #ffd166;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: #1a1a1a;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    .card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .info {
+      padding: 15px;
+    }
+
+    .info h3 {
+      margin: 0 0 8px;
+      color: #06d6a0;
+    }
+
+    .info p {
+      margin: 5px 0;
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    .countdown {
+      margin-top: 10px;
+      padding: 10px;
+      background: #222;
+      border-radius: 6px;
+      text-align: center;
+      font-size: 14px;
+      color: #ffd166;
+    }
+
+    footer {
+      background: #e63946;
+      text-align: center;
+      padding: 12px;
+      font-size: 14px;
+      margin-top: 40px;
+    }
+
+    #logo1{
+      color :#e63946;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+    <header>
+    <div class="logo"><a href = "login.html" target="_main" id = "logo1">VahanBazar</a></div>
+    <nav>
+      <ul>
+        <li><a href="Home.html">Home</a></li>
+        <li><a href="Bikes.html" >Bikes</a></li>
+        <li><a href="Details.html">Details</a></li>
+        <li><a href="Compare.html">Compare</a></li>
+        <li><a href="Calculator.html">Calculator</a></li>
+        <li><a href="Launches.html">Launches</a></li>
+        <!-- <li><a href="Finders.html">Finders</a></li> -->
+        <li><a href="Sell.html">Sell</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Launches Section -->
+  <div class="container">
+    <h2>🚀 Upcoming Bike Launches</h2>
+    <div class="grid" id="launchGrid">
+      <!-- Dynamic cards go here -->
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <!-- <footer>
+    © 2025 Vahan Bazar. All Rights Reserved.
+  </footer> -->
+
+  <script>
+    // Launch Data (Set actual launch dates)
+    const launches = [
+      {
+        name: "Royal Enfield Guerrilla 450",
+        launchDate: "2025-10-15T00:00:00",
+        expectedPrice: "₹2.60 Lakh",
+        img: "Royal Enfield Guerrilla 450.jpg"
+      },
+      {
+        name: "Yamaha MT-03 2025",
+        launchDate: "2025-12-20T00:00:00",
+        expectedPrice: "₹3.40 Lakh",
+        img: "Yamaha MT 03 2025.jpg"
+      },
+      {
+        name: "KTM Duke 490",
+        launchDate: "2026-02-10T00:00:00",
+        expectedPrice: "₹3.80 Lakh",
+        img: "KTM Duke 200.jpg"
+      },
+      {
+        name: "TVS iQube ST",
+        launchDate: "2025-07-01T00:00:00",
+        expectedPrice: "₹1.20 Lakh",
+        img: "TVS iQube.jpg"
+      }
+    ];
+
+    const launchGrid = document.getElementById("launchGrid");
+
+    // Render Launch Cards
+    function renderLaunches() {
+      launches.forEach((bike, index) => {
+        launchGrid.innerHTML += `
+          <div class="card">
+            <img src="${bike.img}" alt="${bike.name}">
+            <div class="info">
+              <h3>${bike.name}</h3>
+              <p><b>Expected Price:</b> ${bike.expectedPrice}</p>
+              <p><b>Launch Date:</b> ${new Date(bike.launchDate).toDateString()}</p>
+              <div class="countdown" id="countdown-${index}">
+                Calculating countdown...
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      // Start Countdown Timers
+      launches.forEach((bike, index) => {
+        startCountdown(bike.launchDate, `countdown-${index}`);
+      });
+    }
+
+    // Countdown Function
+    function startCountdown(date, elementId) {
+      const targetDate = new Date(date).getTime();
+      const countdownEl = document.getElementById(elementId);
+
+      const interval = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+
+        if (distance <= 0) {
+          clearInterval(interval);
+          countdownEl.innerHTML = "🎉 Launched!";
+          return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        countdownEl.innerHTML = `⏳ ${days}d ${hours}h ${minutes}m ${seconds}s left`;
+      }, 1000);
+    }
+
+    renderLaunches();
+  </script>
+
+</body>
+</html>

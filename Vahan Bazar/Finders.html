@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vahan Bazar - Bike Finder</title>
+  <!-- <link rel = "stylesheet" href ="style.css"/> -->
+   <script>
+  const loggedInUser = localStorage.getItem("loggedInUser");
+  if (!loggedInUser) {
+    alert("Please login to access this page.");
+    window.location.href = "index.html"; // redirect to login page
+  }
+</script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+    }
+
+   /* Header */
+    header {
+      background: black;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header .logo {
+      font-size: 22px;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 20px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    nav ul li a.active {
+      border-bottom: 2px solid #000;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #ffd166;
+      margin-bottom: 20px;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+
+    select, input {
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: #1a1a1a;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    .card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+
+    .info {
+      padding: 15px;
+    }
+
+    .info h3 {
+      margin: 0 0 8px;
+      color: #06d6a0;
+    }
+
+    .info p {
+      margin: 4px 0;
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    footer {
+      background: #e63946;
+      text-align: center;
+      padding: 12px;
+      font-size: 14px;
+      margin-top: 40px;
+    }
+
+    #logo1{
+      color :#e63946;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+    <header>
+    <div class="logo"><a href = "login.html" target="_main" id = "logo1">VahanBazar</a></div>
+    <nav>
+      <ul>
+        <!-- <li><a href="Home.html">Home</a></li>
+        <li><a href="Bikes.html" >Bikes</a></li>
+        <li><a href="Details.html">Details</a></li>
+        <li><a href="Compare.html">Compare</a></li>
+        <li><a href="Calculator.html">Calculator</a></li>
+        <li><a href="Launches.html">Launches</a></li> -->
+        <li><a href="Finders.html">Finders</a></li>
+        <!-- <li><a href="Sell.html">Sell</a></li> -->
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Finder Tool -->
+  <div class="container">
+    <h2>🔍 Bike Finder Tool</h2>
+
+    <div class="filters">
+      <select id="brandFilter">
+        <option value="">All Brands</option>
+        <option value="Yamaha">Yamaha</option>
+        <option value="KTM">KTM</option>
+        <option value="Honda">Honda</option>
+        <option value="Bajaj">Bajaj</option>
+        <option value="Ola">Ola</option>
+      </select>
+
+      <select id="priceFilter">
+        <option value="">All Prices</option>
+        <option value="1">Below ₹1 Lakh</option>
+        <option value="2">₹1 Lakh - ₹2 Lakh</option>
+        <option value="3">Above ₹2 Lakh</option>
+      </select>
+
+      <select id="fuelFilter">
+        <option value="">All Fuel Types</option>
+        <option value="Petrol">Petrol</option>
+        <option value="Electric">Electric</option>
+      </select>
+
+      <select id="categoryFilter">
+        <option value="">All Categories</option>
+        <option value="Sports">Sports</option>
+        <option value="Commuter">Commuter</option>
+        <option value="Scooter">Scooter</option>
+        <option value="Cruiser">Cruiser</option>
+      </select>
+
+      <select id="sortFilter">
+        <option value="">Sort By</option>
+        <option value="lowHigh">Price: Low → High</option>
+        <option value="highLow">Price: High → Low</option>
+      </select>
+    </div>
+
+    <div class="grid" id="bikeGrid">
+      <!-- Results will render here -->
+    </div>
+  </div>
+
+  <!-- <footer>
+    © 2025 Vahan Bazar. All Rights Reserved.
+  </footer> -->
+
+  <script>
+    // Bike Data
+    const bikes = [
+      {
+        name: "Yamaha R15 V4",
+        brand: "Yamaha",
+        price: 180000,
+        fuel: "Petrol",
+        category: "Sports",
+        img: "Yamaha R15 V4.jpg"
+      },
+      {
+        name: "KTM Duke 200",
+        brand: "KTM",
+        price: 210000,
+        fuel: "Petrol",
+        category: "Sports",
+        img: "KTM Duke 200.jpg"
+      },
+      {
+        name: "Honda Activa 6G",
+        brand: "Honda",
+        price: 80000,
+        fuel: "Petrol",
+        category: "Scooter",
+        img: "Honda Activa 6G.jpg"
+      },
+      {
+        name: "Ola S1 Pro",
+        brand: "Ola",
+        price: 140000,
+        fuel: "Electric",
+        category: "Scooter",
+        img: "Ola S1 pro.jpg"
+      },
+      {
+        name: "Bajaj Avenger 220",
+        brand: "Bajaj",
+        price: 140000,
+        fuel: "Petrol",
+        category: "Cruiser",
+        img: "Bajaj Avenger  200.jpg"
+      }
+    ];
+
+    const bikeGrid = document.getElementById("bikeGrid");
+    const brandFilter = document.getElementById("brandFilter");
+    const priceFilter = document.getElementById("priceFilter");
+    const fuelFilter = document.getElementById("fuelFilter");
+    const categoryFilter = document.getElementById("categoryFilter");
+    const sortFilter = document.getElementById("sortFilter");
+
+    function renderBikes(list) {
+      bikeGrid.innerHTML = "";
+      if (list.length === 0) {
+        bikeGrid.innerHTML = "<p style='grid-column:1/-1;text-align:center;'>⚠️ No bikes match your filters!</p>";
+        return;
+      }
+      list.forEach(bike => {
+        bikeGrid.innerHTML += `
+          <div class="card">
+            <img src="${bike.img}" alt="${bike.name}">
+            <div class="info">
+              <h3>${bike.name}</h3>
+              <p><b>Brand:</b> ${bike.brand}</p>
+              <p><b>Price:</b> ₹${bike.price.toLocaleString()}</p>
+              <p><b>Fuel:</b> ${bike.fuel}</p>
+              <p><b>Category:</b> ${bike.category}</p>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function applyFilters() {
+      let filtered = [...bikes];
+
+      const brand = brandFilter.value;
+      const price = priceFilter.value;
+      const fuel = fuelFilter.value;
+      const category = categoryFilter.value;
+      const sort = sortFilter.value;
+
+      if (brand) filtered = filtered.filter(b => b.brand === brand);
+      if (fuel) filtered = filtered.filter(b => b.fuel === fuel);
+      if (category) filtered = filtered.filter(b => b.category === category);
+
+      if (price === "1") filtered = filtered.filter(b => b.price < 100000);
+      else if (price === "2") filtered = filtered.filter(b => b.price >= 100000 && b.price <= 200000);
+      else if (price === "3") filtered = filtered.filter(b => b.price > 200000);
+
+      if (sort === "lowHigh") filtered.sort((a,b) => a.price - b.price);
+      else if (sort === "highLow") filtered.sort((a,b) => b.price - a.price);
+
+      renderBikes(filtered);
+    }
+
+    [brandFilter, priceFilter, fuelFilter, categoryFilter, sortFilter]
+      .forEach(el => el.addEventListener("change", applyFilters));
+
+    // Initial Load
+    renderBikes(bikes);
+  </script>
+
+</body>
+</html>

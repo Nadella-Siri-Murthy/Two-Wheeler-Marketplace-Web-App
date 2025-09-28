@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vahan Bazar - Bike Details</title>
+  <script>
+  const loggedInUser = localStorage.getItem("loggedInUser");
+  if (!loggedInUser) {
+    alert("Please login to access this page.");
+    window.location.href = "index.html"; // redirect to login page
+  }
+</script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+    }
+    header {
+      background: black;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header .logo {
+      font-size: 22px;
+      font-weight: bold;
+      color: #fff;
+    }
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 20px;
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: bold;
+    }
+    nav ul li a.active {
+      border-bottom: 2px solid #000;
+    }
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 30px;
+      gap: 30px;
+    }
+    .image-gallery {
+      flex: 1;
+      min-width: 300px;
+    }
+    .image-gallery img {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .image-gallery img:hover {
+      transform: scale(1.05);
+    }
+    .thumbs {
+      display: flex;
+      gap: 10px;
+    }
+    .thumbs img {
+      width: 80px;
+      border-radius: 5px;
+    }
+    .bike-details {
+      flex: 1;
+      min-width: 300px;
+      background: #1a1a1a;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+    }
+    .bike-details h2 {
+      margin: 0 0 15px;
+      color: #ff4500;
+    }
+    .specs p {
+      margin: 8px 0;
+      font-size: 15px;
+      color: #ddd;
+    }
+    .actions {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .actions button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #fff;
+      background: #ff4500;
+      transition: background 0.3s;
+    }
+    .actions button:hover {
+      background: #ff6347;
+    }
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #000;
+      color: #888;
+      margin-top: 30px;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: #222;
+      padding: 25px;
+      border-radius: 10px;
+      width: 320px;
+      text-align: center;
+      color: #fff;
+    }
+    .modal-content h2 {
+      color: #ff4500;
+      margin-bottom: 15px;
+    }
+    .modal-content input {
+      width: 90%;
+      padding: 10px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 5px;
+    }
+    .modal-content button {
+      margin-top: 10px;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      background: #ff4500;
+      color: #fff;
+      cursor: pointer;
+      font-weight: bold;
+      width: 95%;
+    }
+    .close {
+      float: right;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    #logo1 {
+      color: #e63946;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo"><a href="login.html" target="_main" id="logo1">VahanBazar</a></div>
+    <nav>
+      <ul>
+        <li><a href="Home.html">Home</a></li>
+        <li><a href="Bikes.html">Bikes</a></li>
+        <li><a href="Details.html">Details</a></li>
+        <li><a href="Compare.html">Compare</a></li>
+        <li><a href="Calculator.html">Calculator</a></li>
+        <li><a href="Launches.html">Launches</a></li>
+        <li><a href="Sell.html">Sell</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="image-gallery">
+      <img id="mainImg" src="Yamaha R15 V4.jpg" alt="Bike Image">
+      <div class="thumbs" id="thumbs"></div>
+    </div>
+    <div class="bike-details" id="bikeDetails"></div>
+  </div>
+
+  <!-- Google Map -->
+  <div style="padding: 30px;">
+    <h2 style="color:#ff4500;">Nearby Yamaha Showroom</h2>
+    <iframe
+  width="100%"
+  height="300"
+  frameborder="0"
+  style="border:0; border-radius:10px;"
+  src="https://www.google.com/maps/embed/v1/search?key=AIzaSyCjL8Qs-vEfmxR35iNl4UKfupfjdS65oVA&q=Yamaha+Bike+Showroom+near+Guntur+AP"
+  allowfullscreen>
+</iframe>
+  </div>
+
+  <!-- Login Modal -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('loginModal')">&times;</span>
+      <h2>Login</h2>
+      <input type="text" id="loginUser" placeholder="Username">
+      <input type="password" id="loginPass" placeholder="Password">
+      <button onclick="login()">Login</button>
+    </div>
+  </div>
+
+  <!-- Signup Modal -->
+  <div id="signupModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('signupModal')">&times;</span>
+      <h2>Sign Up</h2>
+      <input type="text" id="signupUser" placeholder="Choose Username">
+      <input type="password" id="signupPass" placeholder="Choose Password">
+      <button onclick="signup()">Sign Up</button>
+    </div>
+  </div>
+
+  <!-- Test Ride Modal -->
+  <div id="testRideModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('testRideModal')">&times;</span>
+      <h2>Book Test Ride</h2>
+      <input type="text" id="testName" placeholder="Your Name" />
+      <input type="email" id="testEmail" placeholder="Email Address" />
+      <input type="tel" id="testPhone" placeholder="Phone Number" />
+      <input type="date" id="testDate" />
+      <button onclick="bookTestRide()">Confirm Booking</button>
+    </div>
+  </div>
+
+  <script>
+    const bike = {
+      name: "Yamaha R15 V4",
+      price: "₹1,80,000",
+      engine: "155cc, Liquid Cooled",
+      mileage: "45 kmpl",
+      fuel: "Petrol",
+      power: "18.4 PS @ 10000 rpm",
+      torque: "14.2 Nm @ 7500 rpm",
+      images: [
+        "YamahaDuplicate1.jpg",
+        "YamahaDuplicate2.jpg",
+        "YamahaDuplicate3.jpg",
+        "YamahaDuplicate4.jpg"
+      ]
+    };
+
+    document.getElementById("mainImg").src = bike.images[0];
+    const thumbs = document.getElementById("thumbs");
+    bike.images.slice(1).forEach(img => {
+      const thumb = document.createElement("img");
+      thumb.src = img;
+      thumb.onclick = () => document.getElementById("mainImg").src = img;
+      thumbs.appendChild(thumb);
+    });
+
+        document.getElementById("bikeDetails").innerHTML = `
+      <h2>${bike.name}</h2>
+      <div class="specs">
+        <p><b>Price:</b> ${bike.price}</p>
+        <p><b>Engine:</b> ${bike.engine}</p>
+        <p><b>Mileage:</b> ${bike.mileage}</p>
+        <p><b>Fuel Type:</b> ${bike.fuel}</p>
+        <p><b>Max Power:</b> ${bike.power}</p>
+        <p><b>Max Torque:</b> ${bike.torque}</p>
+      </div>
+      <div class="actions">
+        <button onclick="compareBike()">Compare</button>
+        <button onclick="window.location.href='Calculator.html'">EMI Calculator</button>
+        <button onclick="openModal('testRideModal')">Book Test Ride</button>
+      </div>
+    `;
+
+    function compareBike() {
+      localStorage.setItem("compareBike", JSON.stringify(bike));
+      window.location.href = "Compare.html";
+    }
+
+    function openModal(id) {
+      document.getElementById(id).style.display = "flex";
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).style.display = "none";
+    }
+
+    function signup() {
+      const user = document.getElementById("signupUser").value.trim();
+      const pass = document.getElementById("signupPass").value.trim();
+      if (!user || !pass) {
+        alert("Fill all fields!");
+        return;
+      }
+      if (pass.length < 4) {
+        alert("Password must be at least 4 characters!");
+        return;
+      }
+      localStorage.setItem("user", user);
+      localStorage.setItem("pass", pass);
+      alert("Signup successful! Please login.");
+      closeModal("signupModal");
+    }
+
+    function login() {
+      const user = document.getElementById("loginUser").value.trim();
+      const pass = document.getElementById("loginPass").value.trim();
+      const savedUser = localStorage.getItem("user");
+      const savedPass = localStorage.getItem("pass");
+      if (user === savedUser && pass === savedPass) {
+        localStorage.setItem("loggedInUser", user);
+        showLoggedIn(user);
+        closeModal("loginModal");
+      } else {
+        alert("Invalid username or password!");
+      }
+    }
+
+    function showLoggedIn(user) {
+      const authArea = document.getElementById("authArea");
+      if (authArea) {
+        authArea.innerHTML = `
+          <span>👋 Welcome, <b>${user}</b></span>
+          <button class="logout-btn" onclick="logout()">Logout</button>
+        `;
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem("loggedInUser");
+      const authArea = document.getElementById("authArea");
+      if (authArea) {
+        authArea.innerHTML = `
+          <button class="login-btn" onclick="openModal('loginModal')">Log In</button>
+          <button class="signup-btn" onclick="openModal('signupModal')">Sign Up</button>
+        `;
+      }
+    }
+
+    function bookTestRide() {
+      const name = document.getElementById("testName").value.trim();
+      const email = document.getElementById("testEmail").value.trim();
+      const phone = document.getElementById("testPhone").value.trim();
+      const date = document.getElementById("testDate").value;
+
+      if (!name || !email || !phone || !date) {
+        alert("Please fill all fields to book your test ride.");
+        return;
+      }
+
+      alert(`Test ride booked for ${name} on ${date}. We'll contact you at ${phone}.`);
+      closeModal("testRideModal");
+    }
+
+    window.onload = () => {
+      const loggedInUser = localStorage.getItem("loggedInUser");
+      if (loggedInUser) showLoggedIn(loggedInUser);
+    };
+
+    window.onclick = (e) => {
+      if (e.target.classList.contains("modal")) e.target.style.display = "none";
+    };
+  </script>
+</body>
+</html>

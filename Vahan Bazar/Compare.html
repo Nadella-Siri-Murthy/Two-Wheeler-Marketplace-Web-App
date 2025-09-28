@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vahan Bazar - Compare Bikes</title>
+  <!-- <link rel = "stylesheet" href ="style.css"/> -->
+   <script>
+  const loggedInUser = localStorage.getItem("loggedInUser");
+  if (!loggedInUser) {
+    alert("Please login to access this page.");
+    window.location.href = "index.html"; // redirect to login page
+  }
+</script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+    }
+        /* Header */
+    header {
+      background: black;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header .logo {
+      font-size: 22px;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 20px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    nav ul li a.active {
+      border-bottom: 2px solid #000;
+    }
+    .compare-container {
+      padding: 20px;
+    }
+
+    .selectors {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    select {
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      font-size: 16px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: #1a1a1a;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th, td {
+      border: 1px solid #333;
+      padding: 12px;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    th {
+      background: #e63946;
+      color: #fff;
+    }
+
+    tr:nth-child(even) {
+      background: #222;
+    }
+
+    tr:hover {
+      background: #333;
+    }
+
+    .highlight {
+      color: #4caf50;
+      font-weight: bold;
+    }
+
+    .lowlight {
+      color: #ff4757;
+      font-weight: bold;
+    }
+
+    .bike-img {
+      width: 150px;
+      border-radius: 10px;
+    }
+
+    .note {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #bbb;
+      text-align: center;
+    }
+    #logo1{
+      color :#e63946;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+<header>
+    <div class="logo"><a href = "login.html" target="_main" id = "logo1">VahanBazar</a></div>
+    <nav>
+      <ul>
+        <li><a href="Home.html">Home</a></li>
+        <li><a href="Bikes.html" >Bikes</a></li>
+        <li><a href="Details.html">Details</a></li>
+        <li><a href="Compare.html">Compare</a></li>
+        <li><a href="Calculator.html">Calculator</a></li>
+        <li><a href="Launches.html">Launches</a></li>
+        <!-- <li><a href="Finders.html">Finders</a></li> -->
+        <li><a href="Sell.html">Sell</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="compare-container">
+    <!-- Dropdown selectors -->
+    <div class="selectors">
+      <select id="bike1" onchange="updateComparison()">
+        <option value="">-- Select First Bike --</option>
+      </select>
+      <select id="bike2" onchange="updateComparison()">
+        <option value="">-- Select Second Bike --</option>
+      </select>
+    </div>
+
+    <!-- Comparison Table -->
+    <table id="compareTable">
+      <tr>
+        <th>Specification</th>
+        <th>Bike 1</th>
+        <th>Bike 2</th>
+      </tr>
+    </table>
+
+    <p class="note">✅ Green = better | ❌ Red = lower</p>
+  </div>
+
+  <script>
+    // Dummy bike database
+    const bikes = {
+      "Yamaha R15 V4": {
+        img: "Yamaha R15 V4.jpg",
+        price: 180000,
+        engine: "155cc, Liquid Cooled",
+        mileage: 45,
+        fuel: "Petrol",
+        power: 18.4,
+        torque: 14.2
+      },
+      "KTM RC 200": {
+        img: "KTM RC 200.jpg",
+        price: 214000,
+        engine: "199.5cc, Liquid Cooled",
+        mileage: 35,
+        fuel: "Petrol",
+        power: 25,
+        torque: 19.2
+      },
+      "Bajaj Pulsar NS200": {
+        img: "bajaj Pulser 200.jpg",
+        price: 150000,
+        engine: "199.5cc, Liquid Cooled",
+        mileage: 40,
+        fuel: "Petrol",
+        power: 24.5,
+        torque: 18.5
+      }
+    };
+
+    // Populate dropdowns
+    const bike1Select = document.getElementById("bike1");
+    const bike2Select = document.getElementById("bike2");
+
+    for (let bike in bikes) {
+      bike1Select.innerHTML += `<option value="${bike}">${bike}</option>`;
+      bike2Select.innerHTML += `<option value="${bike}">${bike}</option>`;
+    }
+
+    // Update table
+    function updateComparison() {
+      const b1 = bikes[bike1Select.value];
+      const b2 = bikes[bike2Select.value];
+      const table = document.getElementById("compareTable");
+
+      if (!b1 || !b2) {
+        table.innerHTML = `
+          <tr>
+            <th>Specification</th>
+            <th>Bike 1</th>
+            <th>Bike 2</th>
+          </tr>`;
+        return;
+      }
+
+      table.innerHTML = `
+        <tr>
+          <th>Specification</th>
+          <th><img src="${b1.img}" class="bike-img"><br>${bike1Select.value}</th>
+          <th><img src="${b2.img}" class="bike-img"><br>${bike2Select.value}</th>
+        </tr>
+        <tr><td>Price</td><td>₹${b1.price}</td><td>₹${b2.price}</td></tr>
+        <tr><td>Engine</td><td>${b1.engine}</td><td>${b2.engine}</td></tr>
+        <tr>
+          <td>Mileage</td>
+          <td class="${b1.mileage > b2.mileage ? 'highlight':'lowlight'}">${b1.mileage} kmpl</td>
+          <td class="${b2.mileage > b1.mileage ? 'highlight':'lowlight'}">${b2.mileage} kmpl</td>
+        </tr>
+        <tr><td>Fuel Type</td><td>${b1.fuel}</td><td>${b2.fuel}</td></tr>
+        <tr>
+          <td>Max Power</td>
+          <td class="${b1.power > b2.power ? 'highlight':'lowlight'}">${b1.power} PS</td>
+          <td class="${b2.power > b1.power ? 'highlight':'lowlight'}">${b2.power} PS</td>
+        </tr>
+        <tr>
+          <td>Max Torque</td>
+          <td class="${b1.torque > b2.torque ? 'highlight':'lowlight'}">${b1.torque} Nm</td>
+          <td class="${b2.torque > b1.torque ? 'highlight':'lowlight'}">${b2.torque} Nm</td>
+        </tr>
+      `;
+    }
+  </script>
+</body>
+</html>

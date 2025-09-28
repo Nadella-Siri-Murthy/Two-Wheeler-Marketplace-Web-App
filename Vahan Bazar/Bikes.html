@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vahan Bazar - Bikes</title>
+  <script>
+  const loggedInUser = localStorage.getItem("loggedInUser");
+  if (!loggedInUser) {
+    alert("Please login to access this page.");
+    window.location.href = "index.html"; // redirect to login page
+  }
+</script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+    }
+
+    header {
+      background: black;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header .logo {
+      font-size: 22px;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 20px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    nav ul li a.active {
+      border-bottom: 2px solid #000;
+    }
+
+    .filters {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      padding: 15px;
+      background: #222;
+      flex-wrap: wrap;
+    }
+
+    .filters select, .filters input {
+      padding: 8px;
+      border-radius: 5px;
+      border: none;
+      font-size: 14px;
+    }
+
+    .bike-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .bike-card {
+      background: #1a1a1a;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0px 4px 6px rgba(0,0,0,0.4);
+      transition: transform 0.2s;
+    }
+
+    .bike-card:hover {
+      transform: scale(1.05);
+    }
+
+    .bike-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .bike-info {
+      padding: 15px;
+    }
+
+    .bike-info h3 {
+      margin: 0 0 5px;
+      color: #e63946;
+    }
+
+    .bike-info p {
+      margin: 3px 0;
+      font-size: 14px;
+      color: #bbb;
+    }
+
+    .bike-info button {
+      margin-top: 10px;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .compare-btn {
+      background: #e63946;
+      color: #fff;
+    }
+
+    .wishlist-btn {
+      background: #444;
+      color: #fff;
+      margin-left: 5px;
+    }
+
+    .wishlist-btn.active {
+      background: gold;
+      color: black;
+    }
+
+    footer {
+      background: #e63946;
+      text-align: center;
+      padding: 10px;
+      margin-top: 20px;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    #logo1 {
+      color: #e63946;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo"><a href="login.html" target="_main" id="logo1">VahanBazar</a></div>
+    <nav>
+      <ul>
+        <li><a href="Home.html">Home</a></li>
+        <li><a href="Bikes.html">Bikes</a></li>
+        <li><a href="Details.html">Details</a></li>
+        <li><a href="Compare.html">Compare</a></li>
+        <li><a href="Calculator.html">Calculator</a></li>
+        <li><a href="Launches.html">Launches</a></li>
+        <!-- <li><a href="Finders.html">Finders</a></li> -->
+        <li><a href="Sell.html">Sell</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="filters">
+    <input type="text" id="search" placeholder="Search Bikes..." />
+    <select id="brandFilter">
+      <option value="">All Brands</option>
+      <option value="Honda">Honda</option>
+      <option value="Yamaha">Yamaha</option>
+      <option value="TVS">TVS</option>
+      <option value="Royal Enfield">Royal Enfield</option>
+      <option value="KTM">KTM</option>
+      <option value="Ola">Ola</option>
+      <option value="Bajaj">Bajaj</option>
+    </select>
+    <select id="fuelFilter">
+      <option value="">All Fuel Types</option>
+      <option value="Petrol">Petrol</option>
+      <option value="Electric">Electric</option>
+      <option value="Commuter">Commuter</option>
+      <option value="Cruiser">Cruiser</option>
+    </select>
+    <select id="sortFilter">
+      <option value="">Sort By</option>
+      <option value="nameAsc">Name (A-Z)</option>
+      <option value="priceLowHigh">Price (Low-High)</option>
+      <option value="priceHighLow">Price (High-Low)</option>
+    </select>
+    <select id="priceFilter">
+      <option value="">All Prices</option>
+      <option value="1">Below ₹1 Lakh</option>
+      <option value="2">₹1 Lakh - ₹2 Lakh</option>
+      <option value="3">Above ₹2 Lakh</option>
+    </select>
+    <select id="categoryFilter">
+      <option value="">All Categories</option>
+      <option value="Sports">Sports</option>
+      <option value="Commuter">Commuter</option>
+      <option value="Scooter">Scooter</option>
+      <option value="Cruiser">Cruiser</option>
+    </select>
+  </div>
+
+  <div class="bike-grid" id="bikeGrid"></div>
+
+  <script>
+    const bikes = [
+      { name: "Honda Activa 6G", brand: "Honda", price: 75000, fuel: "Petrol", category: "Scooter", img: "Honda Activa 6G.jpg" },
+      { name: "Yamaha R15 V4", brand: "Yamaha", price: 180000, fuel: "Petrol", category: "Sports", img: "Yamaha R15 V4.jpg" },
+      { name: "TVS iQube", brand: "TVS", price: 120000, fuel: "Electric", category: "Scooter", img: "TVS iQube.jpg" },
+      { name: "Royal Enfield Classic 350", brand: "Royal Enfield", price: 210000, fuel: "Commuter", category: "Cruiser", img: "Royal Enfield Classic 350.jpg" },
+      { name: "KTM Duke 200", brand: "KTM", price: 210000, fuel: "Petrol", category: "Commuter", img: "KTM Duke 200.jpg" },
+      { name: "Ola S1 Pro", brand: "Ola", price: 140000, fuel: "Electric", category: "Commuter", img: "Ola S1 Pro.jpg" },
+      { name: "Bajaj Avenger 220", brand: "Bajaj", price: 140000, fuel: "Cruiser", category: "Cruiser", img: "Bajaj Avenger  200.jpg" },
+    ];
+
+    const bikeGrid = document.getElementById("bikeGrid");
+    const search = document.getElementById("search");
+    const brandFilter = document.getElementById("brandFilter");
+    const fuelFilter = document.getElementById("fuelFilter");
+    const sortFilter = document.getElementById("sortFilter");
+    const priceFilter = document.getElementById("priceFilter");
+    const categoryFilter = document.getElementById("categoryFilter");
+
+    let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+    function displayBikes(list) {
+    bikeGrid.innerHTML = "";
+    list.forEach(bike => {
+      const isWishlisted = wishlist.includes(bike.name);
+      bikeGrid.innerHTML += `
+        <div class="bike-card">
+          <img src="${bike.img || 'placeholder.jpg'}" alt="${bike.name}">
+          <div class="bike-info">
+            <h3>${bike.name}</h3>
+            <p><b>Brand:</b> ${bike.brand}</p>
+            <p><b>Price:</b> ₹${bike.price.toLocaleString()}</p>
+            <p><b>Fuel:</b> ${bike.fuel}</p>
+            <p><b>Category:</b> ${bike.category}</p>
+            <button class="compare-btn" onclick="alert('Added ${bike.name} to Compare')">Compare</button>
+            <button class="wishlist-btn ${isWishlisted ? 'active' : ''}" onclick="toggleWishlist('${bike.name}')">
+              ${isWishlisted ? "★ Wishlisted" : "☆ Wishlist"}
+            </button>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+
+    function filterBikes() {
+    const searchText = search.value.toLowerCase();
+    const brand = brandFilter.value;
+    const fuel = fuelFilter.value;
+    const sort = sortFilter.value;
+    const price = priceFilter.value;
+    const category = categoryFilter.value;
+
+    let filtered = bikes.filter(bike =>
+      bike.name.toLowerCase().includes(searchText) &&
+      (brand === "" || bike.brand === brand) &&
+      (fuel === "" || bike.fuel === fuel) &&
+      (category === "" || bike.category === category)
+    );
+
+    if (price === "1") {
+      filtered = filtered.filter(bike => bike.price < 100000);
+    } else if (price === "2") {
+      filtered = filtered.filter(bike => bike.price >= 100000 && bike.price <= 200000);
+    } else if (price === "3") {
+      filtered = filtered.filter(bike => bike.price > 200000);
+    }
+
+    if (sort === "nameAsc") {
+      filtered.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sort === "priceLowHigh") {
+      filtered.sort((a, b) => a.price - b.price);
+    } else if (sort === "priceHighLow") {
+      filtered.sort((a, b) => b.price - a.price);
+    }
+
+    displayBikes(filtered);
+  }
+
+  function toggleWishlist(bikeName) {
+    if (wishlist.includes(bikeName)) {
+      wishlist = wishlist.filter(b => b !== bikeName);
+    } else {
+      wishlist.push(bikeName);
+    }
+    localStorage.setItem("wishlist", JSON.stringify(wishlist));
+    filterBikes();
+  }
+
+  // Event listeners
+  search.addEventListener("input", filterBikes);
+  brandFilter.addEventListener("change", filterBikes);
+  fuelFilter.addEventListener("change", filterBikes);
+  sortFilter.addEventListener("change", filterBikes);
+  priceFilter.addEventListener("change", filterBikes);
+  categoryFilter.addEventListener("change", filterBikes);
+
+  // Initial load
+  displayBikes(bikes);
+</script>
+</body>
+</html>

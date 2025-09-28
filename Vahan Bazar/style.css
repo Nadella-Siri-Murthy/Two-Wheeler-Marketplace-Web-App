@@ -1,0 +1,119 @@
+*{
+    text-decoration : none;
+    margin : 0px;
+    padding: 0px;
+}
+
+main{
+    height:768.55;
+}
+input{
+    width : 300px;
+}
+
+#navdiv{
+    font-size : 20px;
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+}
+
+.navbar{
+    height : 90px;
+    background-color: black;
+    color:white;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+span{
+    font-size : 50px;
+    background-color :black;
+}
+a{
+    color:white;
+    font-size: 20px;
+    font-weight : bold;
+    margin-right: 25px;
+}
+
+button{
+    background-color: orangered;
+    margin-left : 10px;
+    border-radius: 10px;
+    padding :10px;
+    width :90px;
+}
+
+
+#bc{
+    background-image: url("Motor\ Bikes\ Scooters\ EVs.jpg");
+    background-size: cover;
+}
+
+#logo{
+    font-style: italic;
+    color : orangered;
+    background-color : black;
+    font-size : 70px;
+    font-weight : 600px;
+}
+
+#block{
+    display:inline-block;
+}
+
+#foot{
+    background-color: black;
+    height : 50px;
+}
+
+#search{
+    background-color: white;
+    border-radius:10px;
+    border:2px solid orangered;
+}
+
+
+a{
+    text-decoration:none;
+    color : orangered;
+}
+
+button{
+    border:2px solid orangered;
+    border-radius : 10px;
+    color : white;
+    font-size : 16px;
+    font-weight : bold;
+}
+
+li{
+    display : inline-block;
+    list-style : none;
+    font-style: italic;
+    color : orangered;
+    background-color : black;
+    font-size : 20px;
+}
+
+#inmain{
+    height : 100vh;
+    border-top: 30px;
+    text-align: center;
+    /* font-size : 70px; */
+    font-style: italic;
+    color: white;
+}
+
+#foot{
+    background-color: black;
+    padding-top: 25px;
+    color:white;
+    text-align: center;
+}
+
+
+.navbar{
+    height : 150px;
+}

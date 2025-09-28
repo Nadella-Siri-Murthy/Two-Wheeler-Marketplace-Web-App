@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vahan Bazar - Home</title>
+  <!-- <link rel = "stylesheet" href ="style.css"/> -->
+   <script>
+  const loggedInUser = localStorage.getItem("loggedInUser");
+  if (!loggedInUser) {
+    alert("Please login to access this page.");
+    window.location.href = "index.html"; // redirect to login page
+  }
+</script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+    }
+
+    header {
+      background: black;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header .logo {
+      font-size: 22px;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 20px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    nav ul li a.active {
+      border-bottom: 2px solid #000;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: url("https://imgd.aeplcdn.com/1200x675/n/cw/ec/130971/royal-enfield-guerrilla-450-right-front-three-quarter.jpeg") center/cover no-repeat;
+      height: 70vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: #fff;
+    }
+
+    .hero h2 {
+      font-size: 42px;
+      margin: 0;
+    }
+
+    .hero p {
+      font-size: 18px;
+      margin: 10px 0;
+    }
+
+    .search-bar {
+      margin-top: 20px;
+      display: flex;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .search-bar input {
+      padding: 12px;
+      border: none;
+      outline: none;
+      width: 250px;
+    }
+
+    .search-bar button {
+      background: #06d6a0;
+      border: none;
+      padding: 12px 20px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .search-bar button:hover {
+      background: #05b589;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #ffd166;
+    }
+
+    .filters {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    .filters select {
+      padding: 10px;
+      border-radius: 6px;
+      border: none;
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: #1a1a1a;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    .card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+
+    .info {
+      padding: 15px;
+    }
+
+    .info h3 {
+      margin: 0 0 8px;
+      color: #06d6a0;
+    }
+
+    .info p {
+      margin: 5px 0;
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    footer {
+      background: #e63946;
+      text-align: center;
+      padding: 12px;
+      font-size: 14px;
+      margin-top: 40px;
+    }
+
+    #logo1{
+      color :#e63946;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo"><a href = "login.html" target="_main" id = "logo1">VahanBazar</a></div>
+    <nav>
+      <ul>
+        <li><a href="Home.html">Home</a></li>
+        <li><a href="Bikes.html" >Bikes</a></li>
+        <li><a href="Details.html">Details</a></li>
+        <li><a href="Compare.html">Compare</a></li>
+        <li><a href="Calculator.html">Calculator</a></li>
+        <li><a href="Launches.html">Launches</a></li>
+        <!-- <li><a href="Finders.html">Finders</a></li> -->
+        <li><a href="Sell.html">Sell</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h2>Search Bikes, Scooters, EVs</h2>
+    <p>Find your perfect ride in seconds!</p>
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search by model...">
+      <button onclick="searchBike()">Search</button>
+    </div>
+  </section>
+
+  <!-- Filters -->
+  <div class="container">
+    <h2>🔍 Explore Bikes</h2>
+    <div class="filters">
+      <select id="brandFilter" onchange="applyFilters()">
+        <option value="">Filter by Brand</option>
+      </select>
+      <select id="priceFilter" onchange="applyFilters()">
+        <option value="">Filter by Price</option>
+        <option value="1">Below ₹1 Lakh</option>
+        <option value="2">₹1 Lakh - ₹2 Lakh</option>
+        <option value="3">Above ₹2 Lakh</option>
+      </select>
+      <select id="fuelFilter" onchange="applyFilters()">
+        <option value="">Filter by Fuel</option>
+        <option value="Petrol">Petrol</option>
+        <option value="EV">EV</option>
+      </select>
+    </div>
+
+    <!-- Featured Bikes -->
+    <div class="grid" id="bikeGrid"></div>
+  </div>
+
+  <!-- Upcoming Launch Preview -->
+  <div class="container">
+    <h2>🚀 Upcoming Launches</h2>
+    <div class="grid" id="launchGrid"></div>
+  </div>
+
+  <!-- Footer -->
+  <!-- <footer>
+    © 2025 Vahan Bazar. All Rights Reserved.
+  </footer> -->
+
+  <script>
+    // Sample Bikes Data
+    const bikes = [
+      { brand: "Honda", model: "Shine", price: 75000, fuel: "Petrol", img: "Honda Activa 6G.jpg" },
+      { brand: "Royal Enfield", model: "Classic 350", price: 210000, fuel: "Petrol", img: "Royal Enfield Classic 350.jpg" },
+      { brand: "TVS", model: "iQube", price: 120000, fuel: "EV", img: "TVS iQube.jpg" },
+      { brand: "Yamaha", model: "MT-15", price: 160000, fuel: "Petrol", img: "Yamaha MT 15.jpg" }
+    ];
+
+    // Upcoming Launches (preview from Launches page)
+    const launches = [
+      { name: "Royal Enfield Guerrilla 450", date: "Oct 2025", img: "Royal Enfield Guerrilla 450.jpg" },
+      { name: "Yamaha MT-03 2025", date: "Dec 2025", img: "Yamaha MT 03 2025.jpg" },
+      { name: "KTM Duke", date: "Feb 2026", img: "KTM Duke 200.jpg" },
+      { name: "TVS iQube", date: "July 2025", img: "TVS iQube.jpg" },
+    ];
+
+    const bikeGrid = document.getElementById("bikeGrid");
+    const brandFilter = document.getElementById("brandFilter");
+
+    // Fill brand filter
+    [...new Set(bikes.map(b => b.brand))].forEach(brand => {
+      const option = document.createElement("option");
+      option.value = brand;
+      option.textContent = brand;
+      brandFilter.appendChild(option);
+    });
+
+    // Render Bikes
+    function renderBikes(list) {
+      bikeGrid.innerHTML = "";
+      list.forEach(bike => {
+        bikeGrid.innerHTML += `
+          <div class="card">
+            <img src="${bike.img}" alt="${bike.model}">
+            <div class="info">
+              <h3>${bike.brand} ${bike.model}</h3>
+              <p><b>Price:</b> ₹${bike.price.toLocaleString()}</p>
+              <p><b>Fuel:</b> ${bike.fuel}</p>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    // Render Launches
+    function renderLaunches() {
+      const launchGrid = document.getElementById("launchGrid");
+      launches.forEach(launch => {
+        launchGrid.innerHTML += `
+          <div class="card">
+            <img src="${launch.img}" alt="${launch.name}">
+            <div class="info">
+              <h3>${launch.name}</h3>
+              <p><b>Expected Launch:</b> ${launch.date}</p>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    // Search
+    function searchBike() {
+      const keyword = document.getElementById("searchInput").value.toLowerCase();
+      const filtered = bikes.filter(b => b.model.toLowerCase().includes(keyword) || b.brand.toLowerCase().includes(keyword));
+      renderBikes(filtered);
+    }
+
+    // Apply Filters
+    function applyFilters() {
+      let filtered = bikes;
+
+      const brand = brandFilter.value;
+      const price = document.getElementById("priceFilter").value;
+      const fuel = document.getElementById("fuelFilter").value;
+
+      if (brand) filtered = filtered.filter(b => b.brand === brand);
+      if (price === "1") filtered = filtered.filter(b => b.price < 100000);
+      if (price === "2") filtered = filtered.filter(b => b.price >= 100000 && b.price <= 200000);
+      if (price === "3") filtered = filtered.filter(b => b.price > 200000);
+      if (fuel) filtered = filtered.filter(b => b.fuel === fuel);
+
+      renderBikes(filtered);
+    }
+
+    // Init
+    renderBikes(bikes);
+    renderLaunches();
+  </script>
+</body>
+</html>
